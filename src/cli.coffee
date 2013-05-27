@@ -119,7 +119,7 @@ module.exports = class CLI
       for item in @input
         resolved = path.resolve item
         if fs.statSync(item).isDirectory()
-          files.push (@generateDir path.dirname(resolved), resolved)...
+          files.push (@generateDir resolved)...
         else
           files.push @generateFile path.dirname(resolved), path.dirname(resolved), path.basename(resolved)
 
@@ -127,7 +127,7 @@ module.exports = class CLI
 
 
   ###
-  Write the output according
+  Write the output
   ###
   writeOutput: (files) ->
     if @bare
@@ -173,7 +173,6 @@ module.exports = class CLI
   generateFile: (wd, folder, filename) ->
     extname = path.extname filename
     name = path.basename filename, extname
-    folder = folder.substr(wd.length)
     original = path.join(wd, folder, filename)
     try
       ast = @generator.generate fs.readFileSync original, "utf8"
@@ -203,11 +202,20 @@ module.exports = class CLI
   ###
   generateDir: (wd, folder) ->
     files = []
-    for item in fs.readdirSync path.join(folder)
-      if fs.statSync(path.join(folder, item)).isDirectory()
-        files.push @generateDir(wd, path.join(folder, item))...
+    if folder?
+       input = path.join(wd, folder)
+    else
+      input = wd
+
+    for item in fs.readdirSync input
+      if fs.statSync(path.join input, item).isDirectory()
+        if folder?
+          files.push @generateDir(wd, path.join(folder,item))...
+        else
+          files.push @generateDir(wd, item)...
       else if @pattern.test item
-          files.push @generateFile wd, folder, item
+        files.push @generateFile wd, folder, item
+
     files
 
 

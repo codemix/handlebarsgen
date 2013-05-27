@@ -1,3 +1,5 @@
+Base = require "../php"
+
 module.exports =
   Nodes: require "./nodes"
   Blocks: require "./blocks"
@@ -10,6 +12,11 @@ module.exports =
   The pattern to use when looking for templates
   ###
   pattern: /^template\.html$/
+
+  ###
+  Combine the given (parsed, processed) files into one
+  ###
+  combine: Base.combine
 
   ###
   The templates that should be used to wrap the contents
