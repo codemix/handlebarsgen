@@ -30,7 +30,7 @@ comment "Comment"
   }
 
 partial "Partial"
-  = ">" _ name:$[A-Za-z0-9_]+ {
+  = ">" _ name:$(!"}}" .)+ {
     return {
       type: "partial",
       name: name
