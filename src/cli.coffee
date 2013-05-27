@@ -24,6 +24,8 @@ module.exports = class CLI
     # Set whether or not to display help output
     @help = options.help or false
 
+    # Set whether or not to display the version number
+    @version = options.version or false
 
     # Set whether or not to compile bare output, e.g. no header / footer templates
     if options.bare?
@@ -65,7 +67,7 @@ module.exports = class CLI
     pack = JSON.parse fs.readFileSync path.join(__dirname, '..', 'package.json'), 'utf8'
 
     process.stderr.write """
-      #{pack.name} v#{pack.version} by #{pack.author}
+      #{pack.name} v#{pack.version} by #{pack.author.name}
 
       #{pack.description}
 
@@ -86,16 +88,23 @@ module.exports = class CLI
 
         --bare              If set, template output will not be decorated with headers and footers.
 
+        --version           Print the version number
 
     """
 
+  ###
+  Display the version number
+  ###
+  showVersion: ->
+    pack = JSON.parse fs.readFileSync path.join(__dirname, '..', 'package.json'), 'utf8'
+    process.stdout.write "#{pack.version}\n"
 
   ###
   Run the command
   ###
   run: ->
     return @showHelp() if @help
-
+    return @showVersion() if @version
     files = []
     if @input is null
       # read from stdin instead
