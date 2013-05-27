@@ -1,7 +1,7 @@
 {
   "name": "handlebars-gen",
   "description": "An extendable static code generator for handlebars templates, targetting languages other than JavaScript, e.g. PHP",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": {
     "name": "Charles Pick",
     "email": "charles.pick@gmail.com>"

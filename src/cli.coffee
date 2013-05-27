@@ -39,6 +39,10 @@ module.exports = class CLI
     else
       @pattern = @target.pattern
 
+    # Set whether or not to dump the meta data
+    @outputMeta = options.meta or false
+
+
     # Set the file extension to use when generating templates
     @extname = options.extname or @target.extname
 
@@ -88,7 +92,11 @@ module.exports = class CLI
 
         --bare              If set, template output will not be decorated with headers and footers.
 
+        --meta FILENAME     Dump the meta data to the given filename
+
         --version           Print the version number
+
+        --help              Display this help screen
 
     """
 
@@ -105,16 +113,19 @@ module.exports = class CLI
   run: ->
     return @showHelp() if @help
     return @showVersion() if @version
+
     files = []
     if @input is null
       # read from stdin instead
-      files.push
+      files.push =
         id: "__stdin__"
         name: "__stdin__"
         folder: "__stdin__"
         original: "__stdin__"
         extname: ""
-        ast: @generator.generate fs.readFileSync '/dev/stdin', 'utf8'
+        ast: generator.generate fs.readFileSync '/dev/stdin', 'utf8'
+
+
     else
       for item in @input
         resolved = path.resolve item
@@ -150,6 +161,7 @@ module.exports = class CLI
         mkdirp.sync targetFolder
         targetFile = path.join(targetFolder, "#{file.name}#{@extname}")
         fs.writeFile targetFile, @generator.wrapFile file, wrapperTemplates
+      @writeMeta files if @outputMeta
       return
 
 
@@ -163,6 +175,17 @@ module.exports = class CLI
     else
       data = @target.combine files, wrapperTemplates
       process.stdout.write "#{data}\n"
+
+    if @outputMeta
+      @writeMeta files if @outputMeta
+
+
+  ###
+  Write the meta data to a file
+  ###
+  writeMeta: (files) ->
+    fs.writeFile @outputMeta, JSON.stringify files, null, 2
+
 
 
 
@@ -189,7 +212,7 @@ module.exports = class CLI
         "\n"
       ].join " "
       process.exit(1)
-    id: folder.substr(1).replace(path.sep, "/")
+    id: folder.replace(path.sep, "/")
     name: name
     extname: extname
     folder: folder

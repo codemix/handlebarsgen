@@ -9,7 +9,7 @@ module.exports =
   ###
   The pattern to use when looking for templates
   ###
-  pattern: /^template\.html$/
+  pattern: /\.html$/
 
   ###
   Combine the given (parsed, processed) files into one
