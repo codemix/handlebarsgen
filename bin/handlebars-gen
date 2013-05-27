@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+var Lib = require("../lib"),
+    cli = new Lib.CLI;
+
+cli.run();
