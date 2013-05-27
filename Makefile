@@ -4,6 +4,4 @@ build: build-grammar
 build-grammar:
 	@./node_modules/.bin/pegjs ./src/grammar.pegjs ./lib/parser.js
 
-
-
 .PHONY: build-grammar
