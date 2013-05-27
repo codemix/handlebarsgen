@@ -1,6 +1,7 @@
 {
   "name": "handlebars-static",
   "description": "An extensible static code generator for handlebars templates, targetting languages other than JavaScript, e.g. PHP",
+  "version": "0.0.1",
   "dependencies": {
     "optimist": "*",
     "mkdirp": "*",
