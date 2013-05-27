@@ -160,7 +160,7 @@ module.exports = class CLI
         targetFolder = path.join(@output, file.folder)
         mkdirp.sync targetFolder
         targetFile = path.join(targetFolder, "#{file.name}#{@extname}")
-        fs.writeFile targetFile, @generator.wrapFile file, wrapperTemplates
+        fs.writeFileSync targetFile, @generator.wrapFile file, wrapperTemplates
       @writeMeta files if @outputMeta
       return
 
@@ -171,7 +171,7 @@ module.exports = class CLI
       else
         data = @generator.wrapFile file, wrapperTemplates
       targetFolder = mkdirp.sync path.dirname @output
-      fs.writeFile @output, data
+      fs.writeFileSync @output, data
     else
       data = @target.combine files, wrapperTemplates
       process.stdout.write "#{data}\n"
@@ -184,7 +184,7 @@ module.exports = class CLI
   Write the meta data to a file
   ###
   writeMeta: (files) ->
-    fs.writeFile @outputMeta, JSON.stringify files, null, 2
+    fs.writeFileSync @outputMeta, JSON.stringify files, null, 2
 
 
 
