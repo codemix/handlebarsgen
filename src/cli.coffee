@@ -21,6 +21,10 @@ module.exports = class CLI
     else
       @target = Targets.php
 
+    # Set whether or not to display help output
+    @help = options.help or false
+
+
     # Set whether or not to compile bare output, e.g. no header / footer templates
     if options.bare?
       @bare = options.bare
@@ -53,8 +57,44 @@ module.exports = class CLI
     @generator = new Generator
       target: @target
 
-  run: ->
 
+  ###
+  Display the help output
+  ###
+  showHelp: ->
+    pack = JSON.parse fs.readFileSync path.join(__dirname, '..', 'package.json'), 'utf8'
+
+    process.stderr.write """
+      #{pack.name} v#{pack.version} by #{pack.author}
+
+      #{pack.description}
+
+      Usage: handlebars-gen --target php --output directory/path INFILE...
+
+      Options:
+
+        INFILE              The file(s) or folder(s) to process
+
+        --output DIR        The directory or file to output the contents to.
+                            If none is given, output will be written to stdout.
+
+        --target NAME       The name of the transpile target to use, e.g. 'php' or 'php-yii'
+
+        --pattern PATTERN   The regular expression that should be used when looking for files.
+
+        --extname EXTNAME   The file extension to use when generating output, defaults to .html
+
+        --bare              If set, template output will not be decorated with headers and footers.
+
+
+    """
+
+
+  ###
+  Run the command
+  ###
+  run: ->
+    return @showHelp() if @help
 
     files = []
     if @input is null
@@ -118,7 +158,9 @@ module.exports = class CLI
 
 
 
-
+  ###
+  Generate a file
+  ###
   generateFile: (wd, folder, filename) ->
     extname = path.extname filename
     name = path.basename filename, extname
@@ -148,7 +190,7 @@ module.exports = class CLI
     ast: ast
 
   ###
-  Generate the
+  Generate all the files in a directory
   ###
   generateDir: (wd, folder) ->
     files = []
@@ -158,4 +200,6 @@ module.exports = class CLI
       else if @pattern.test item
           files.push @generateFile wd, folder, item
     files
+
+
 
