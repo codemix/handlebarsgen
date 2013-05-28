@@ -11,7 +11,7 @@ Extensible ahead-of-time (AOT) template transpiler for Handlebars, targeting lan
 
 Can be used via the command line:
 
-    handlebars-gen --target php --compile --output ./compiled ./src
+    handlebars-gen --target php --output ./compiled ./src
 
 use `handlebars-gen --help` for more information on individual commands.
 
