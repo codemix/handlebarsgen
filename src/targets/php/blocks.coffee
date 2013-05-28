@@ -15,13 +15,13 @@ o "each", ->
 An `if` block
 ###
 o "if", ->
-  "<?php if (#{@subject}): ?>#{@body}<?php endif; ?>"
+  "<?php if (isset(#{@subject}) && #{@subject}): ?>#{@body}<?php endif; ?>"
 
 ###
 An `unless` block
 ###
 o "unless", ->
-  "<?php if (!(#{@subject})): ?>#{@body}<?php endif; ?>"
+  "<?php if (!isset(#{@subject}) || !(#{@subject})): ?>#{@body}<?php endif; ?>"
 
 
 ###
