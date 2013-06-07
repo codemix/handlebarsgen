@@ -9,7 +9,7 @@ o = (name, toString) ->
 An `each` block
 ###
 o "each", ->
-  "<?php foreach(#{@subject} as $#{@keyName} => $#{@scopeName}): ?>#{@body}<?php endforeach; ?>"
+  "<?php if (isset(#{@subject})): foreach(#{@subject} as $#{@keyName} => $#{@scopeName}): ?>#{@body}<?php endforeach; endif; ?>"
 
 ###
 An `if` block
@@ -34,4 +34,4 @@ o "with", ->
 A custom block
 ###
 o "custom", ->
-  "<?php ob_start(); ?>#{@body}<?php $this->#{@name}(#{@subject}, ob_get_clean()); ?>"
+  "<?php ob_start(); ?>#{@body}<?=$this->#{@name}(#{@subject}, ob_get_clean()); ?>"

@@ -22,7 +22,15 @@ o name, node for name, node of Base.Nodes
 
 
 o "partial", ->
-  "<?=$this->renderPartial(\"#{@name}\", array('scope' => $#{@scopeName}), true)?>"
+  if @name is String @name
+    name = JSON.stringify @name
+  else
+    name = @name
+  if @subject
+    scopeName = @subject
+  else
+    scopeName = "$#{@scopeName}"
+  "<?=$this->renderPartial(#{name}, #{scopeName})?>"
 
 o "quotedExpression", ->
   "<?=CHtml::encode(#{@body})?>"
