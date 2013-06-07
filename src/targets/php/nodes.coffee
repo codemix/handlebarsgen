@@ -24,7 +24,15 @@ o "comment", ->
   "<?php /** #{@body} */ ?>"
 
 o "partial", ->
-  "<?=$this->partial(\"#{@name}\", $#{@scopeName})?>"
+  if @name is String @name
+    name = JSON.stringify @name
+  else
+    name = @name
+  if @subject
+    scopeName = @subject
+  else
+    scopeName = "$#{@scopeName}"
+  "<?=$this->partial(#{name}, #{scopeName})?>"
 
 o "callExpression", ->
   "$this->#{@subject}(#{@body.join(', ')})"
@@ -37,7 +45,10 @@ o "quotedExpression", ->
 
 o "accessor", ->
   if @head.type is "identifier"
-    content = ["$#{@scopeName}->#{@head.name}"]
+    if @head.name.charAt(0) is "$"
+      content = [@head.name]
+    else
+      content = ["$#{@scopeName}->#{@head.name}"]
   else
     content = ["$#{@head.name}"]
 

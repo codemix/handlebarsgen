@@ -30,12 +30,14 @@ comment "Comment"
   }
 
 partial "Partial"
-  = ">" _ name:$(!"}}" .)+ {
+  = ">" _ name:(identifierPart / string) ctx:(__ identifier)? {
     return {
       type: "partial",
-      name: name
+      name: name,
+      subject: ctx ? ctx[1] : null
     }
   }
+
 
 expression "Expression"
   = controlExpression
@@ -47,7 +49,7 @@ controlExpression "Control Expression"
   = elseExpression
 
 elseExpression "Else Expression"
-  = "else" ![A-Za-z0-9_] {
+  = "else" ![A-Za-z0-9_\$] {
     return {
       type: "elseExpression"
     }
@@ -55,6 +57,7 @@ elseExpression "Else Expression"
 
 rawExpression "Raw Expression"
   = "{" e:callExpression "}" {
+    e.raw = true;
     return {
       type: "rawExpression",
       body: e
@@ -143,7 +146,7 @@ identifier "Identifier"
   }
 
 thisIdentifier "This Identifier"
-  = "this" ![A-Za-z0-9_] {
+  = "this" ![A-Za-z0-9_\$] {
     return {
       type: "thisIdentifier",
       name: "this"
@@ -168,7 +171,7 @@ keyIdentifier "Key Identifier"
   }
 
 identifierPart "Identifier Part"
-  = $([A-Za-z][A-Za-z0-9_]*)
+  = $([A-Za-z\$_][A-Za-z0-9\$_]*)
 
 number "Number"
   = $[0-9]+

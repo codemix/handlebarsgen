@@ -39,7 +39,7 @@ module.exports = class PostProcessor
       popKeyStack = false
 
       # Members that should be processed before stack manipulation
-
+      visit node.name if node.name?
       visit node.subject if node.subject?
 
 

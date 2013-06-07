@@ -186,10 +186,6 @@ module.exports = class CLI
   writeMeta: (files) ->
     fs.writeFileSync @outputMeta, JSON.stringify files, null, 2
 
-
-
-
-
   ###
   Generate a file
   ###
